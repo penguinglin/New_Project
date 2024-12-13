@@ -19,6 +19,9 @@ constexpr int bagitem_img_left_padding = 30;
 constexpr int bagitem_img_top_padding = 30;
 // draw tower shop items
 constexpr int shop_offset_y = 30;
+// 設定通用的 padding
+const int top_padding = love_img_padding;
+const int text_line_height = 20; // 每行文字間隔高度
 
 void UI::init()
 {
@@ -65,7 +68,7 @@ void UI::update()
 			int w = al_get_bitmap_width(bitmap);
 			int h = al_get_bitmap_height(bitmap);
 			// hover on a shop tower item
-			if (mouse.overlap(Rectangle{p.x, p.y, p.x + w, p.y + h}))
+			if (mouse.overlap(Rectangle{p.x, p.y + text_line_height * 2, p.x + w, p.y + h + text_line_height * 2}))
 			{
 				on_item = i;
 				debug_log("<UI> state: change to HOVER\n");
@@ -80,7 +83,7 @@ void UI::update()
 		auto &[bitmap, p, price] = tower_items[on_item];
 		int w = al_get_bitmap_width(bitmap);
 		int h = al_get_bitmap_height(bitmap);
-		if (!mouse.overlap(Rectangle{p.x, p.y, p.x + w, p.y + h}))
+		if (!mouse.overlap(Rectangle{p.x, p.y + text_line_height * 2, p.x + w, p.y + h + text_line_height * 2}))
 		{
 			on_item = -1;
 			debug_log("<UI> state: change to HALT\n");
@@ -165,9 +168,6 @@ void UI::draw()
 
 	// draw time bar
 	const int &player_timer = DC->player->timer;
-	// 設定通用的 padding
-	const int top_padding = love_img_padding;
-	const int text_line_height = 20; // 每行文字間隔高度
 	al_draw_textf(
 			FC->courier_new[FontSize::MEDIUM], al_map_rgb(0, 0, 0),
 			game_field_length + love_img_padding, love_img_padding,
@@ -233,8 +233,9 @@ void UI::draw()
 		auto &[bitmap, p, price] = tower_items[on_item];
 		int w = al_get_bitmap_width(bitmap);
 		int h = al_get_bitmap_height(bitmap);
+
 		// Create a semitransparent mask covered on the hovered tower.
-		al_draw_filled_rectangle(p.x, p.y + shop_offset_y, p.x + w, p.y + h + shop_offset_y * 2, al_map_rgba(50, 50, 50, 64));
+		al_draw_filled_rectangle(p.x, p.y + shop_offset_y * 2, p.x + w, p.y + h + shop_offset_y * 2, al_map_rgba(50, 50, 50, 64));
 		break;
 	}
 	case STATE::SELECT:
