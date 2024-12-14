@@ -11,6 +11,8 @@
 #include "Player.h"
 #include "towers/Tower.h"
 #include "Level.h"
+#include "towers/bag.h"
+#include <vector>
 
 // fixed settings
 constexpr char love_img_path[] = "./assets/image/love.png";
@@ -68,7 +70,7 @@ void UI::update()
 			int w = al_get_bitmap_width(bitmap);
 			int h = al_get_bitmap_height(bitmap);
 			// hover on a shop tower item
-			if (mouse.overlap(Rectangle{p.x, p.y + text_line_height * 2, p.x + w, p.y + h + text_line_height * 2}))
+			if (mouse.overlap(Rectangle{p.x, p.y + text_line_height, p.x + w, p.y + h + text_line_height}))
 			{
 				on_item = i;
 				debug_log("<UI> state: change to HOVER\n");
@@ -83,7 +85,7 @@ void UI::update()
 		auto &[bitmap, p, price] = tower_items[on_item];
 		int w = al_get_bitmap_width(bitmap);
 		int h = al_get_bitmap_height(bitmap);
-		if (!mouse.overlap(Rectangle{p.x, p.y + text_line_height * 2, p.x + w, p.y + h + text_line_height * 2}))
+		if (!mouse.overlap(Rectangle{p.x, p.y + text_line_height, p.x + w, p.y + h + text_line_height}))
 		{
 			on_item = -1;
 			debug_log("<UI> state: change to HALT\n");
@@ -159,32 +161,35 @@ void UI::draw()
 	const Point &mouse = DC->mouse;
 	// draw HP
 	const int &game_field_length = DC->game_field_length;
-	const int &player_HP = DC->player->HP;
-	int love_width = al_get_bitmap_width(love);
-	for (int i = 1; i <= player_HP; ++i)
-	{
-		al_draw_bitmap(love, game_field_length - (love_width + love_img_padding) * i, love_img_padding, 0);
-	}
+	// const int &player_HP = DC->player->HP;
+	// int love_width = al_get_bitmap_width(love);
+	// for (int i = 1; i <= player_HP; ++i)
+	// {
+	//   al_draw_bitmap(love, game_field_length - (love_width + love_img_padding) * i, love_img_padding, 0);
+	// }
 
 	// draw time bar
 	const int &player_timer = DC->player->timer;
+	// 設定通用的 padding
+	const int top_padding = love_img_padding;
+	const int text_line_height = 20; // 每行文字間隔高度
 	al_draw_textf(
 			FC->courier_new[FontSize::MEDIUM], al_map_rgb(0, 0, 0),
 			game_field_length + love_img_padding, love_img_padding,
 			ALLEGRO_ALIGN_LEFT, "Time: %5d", player_timer);
 
-	// draw coin
-	const int &player_coin = DC->player->coin;
-	al_draw_textf(
-			FC->courier_new[FontSize::MEDIUM], al_map_rgb(0, 0, 0),
-			game_field_length + love_img_padding, top_padding + text_line_height,
-			ALLEGRO_ALIGN_LEFT, "coin: %5d", player_coin);
+	// // draw coin
+	// const int &player_coin = DC->player->coin;
+	// al_draw_textf(
+	//     FC->courier_new[FontSize::MEDIUM], al_map_rgb(0, 0, 0),
+	//     game_field_length + love_img_padding, top_padding + text_line_height,
+	//     ALLEGRO_ALIGN_LEFT, "coin: %5d", player_coin);
 
 	// draw player hungry
 	const int &player_hungry = DC->player->hungry;
 	al_draw_textf(
 			FC->courier_new[FontSize::MEDIUM], al_map_rgb(0, 0, 0),
-			game_field_length + love_img_padding, top_padding + text_line_height * 2,
+			game_field_length + love_img_padding, top_padding + text_line_height,
 			ALLEGRO_ALIGN_LEFT, "hungry: %3d", player_hungry);
 
 	// draw a talking box under the window
@@ -196,8 +201,8 @@ void UI::draw()
 		int h = al_get_bitmap_height(bitmap);
 
 		// 調整 y 座標以加入偏移量
-		int draw_x = p.x;											// 保持 x 不變
-		int draw_y = p.y + shop_offset_y * 2; // 加入垂直偏移量
+		int draw_x = p.x;									// 保持 x 不變
+		int draw_y = p.y + shop_offset_y; // 加入垂直偏移量
 
 		// 繪製塔的圖片
 		al_draw_bitmap(bitmap, draw_x, draw_y, 0);
@@ -233,9 +238,8 @@ void UI::draw()
 		auto &[bitmap, p, price] = tower_items[on_item];
 		int w = al_get_bitmap_width(bitmap);
 		int h = al_get_bitmap_height(bitmap);
-
 		// Create a semitransparent mask covered on the hovered tower.
-		al_draw_filled_rectangle(p.x, p.y + shop_offset_y * 2, p.x + w, p.y + h + shop_offset_y * 2, al_map_rgba(50, 50, 50, 64));
+		al_draw_filled_rectangle(p.x, p.y + shop_offset_y, p.x + w, p.y + h + shop_offset_y, al_map_rgba(50, 50, 50, 64));
 		break;
 	}
 	case STATE::SELECT:

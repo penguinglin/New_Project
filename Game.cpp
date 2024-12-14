@@ -49,12 +49,6 @@ namespace GameSetting_BOAT
 	static constexpr char item_postfix[][15] = {"boat", "brokenboat"};
 }
 
-namespace GameLevelMap
-{
-	static constexpr char game_level_path[50] = "./assets/image/GameMap";
-	static constexpr char level_postfix[][20] = {"_Main_Boat.png", "_Forest.png", "_Road", "_Main_Enpty.png"};
-}
-
 void Game::execute()
 {
 	DataCenter *DC = DataCenter::get_instance();
