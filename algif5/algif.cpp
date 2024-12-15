@@ -1,7 +1,6 @@
 #include "algif.h"
 #include <allegro5/allegro_primitives.h>
 #include <math.h>
-#include <stdio.h>
 
 /* Renders the next frame in a GIF animation to the given position.
  * You need to call this in order on the same destination for frames
@@ -87,43 +86,43 @@ ALGIF_ANIMATION *algif_load_animation(char const *filename) {
     ALLEGRO_FILE *file = al_fopen(filename, "rb");
     return algif_load_animation_f(file);
 }
-bool algif_draw_gif(ALGIF_ANIMATION *gif, double x, double y, int flip) {
-    ALLEGRO_BITMAP *frame = algif_get_bitmap(gif, al_get_time());
-    if (frame) {
-        al_draw_bitmap(frame, x, y, flip);
-        return true;
-    } else {
-        printf("[algif Warning] Try to draw empty frame\n");
-        return false;
-    }
+ALGIF_ANIMATION *algif_new_gif(char const *filename, int loop) {
+    ALGIF_ANIMATION *gif = algif_load_animation(filename);
+    gif->loop = loop;
+    gif->start_time = 0;
+    gif->display_index = 0;
+    gif->done = false;
+    return gif;
 }
 ALLEGRO_BITMAP *algif_get_bitmap(ALGIF_ANIMATION *gif, double seconds) {
-    if (gif->start_time == 0) {
+    if(gif->done || gif->start_time == 0) {
         gif->start_time = seconds;
+        gif->display_index = 0;
+        gif->done = false;
     }
     seconds -= gif->start_time;
-    double one_gif_time = gif->duration / 100.0;
-    // loop forever
-    if (gif->loop == 0 && seconds > one_gif_time) {
-        gif->done = false;
+    double gif_duration = gif->duration / 100.0;
+    // no loop
+    if(gif->loop == -1 && seconds > gif_duration ){
+        gif->done = true;
         gif->start_time = 0;
         gif->display_index = 0;
         return gif->frames[0].rendered;
     }
     // loop n times
-    if(gif->loop > 0 && seconds > one_gif_time * gif->loop){
+    if(gif->loop > 0 && seconds > gif_duration * gif->loop){
         gif->done = true;
         gif->start_time = 0;
         gif->display_index = 0;
-        return NULL;
+        return gif->frames[0].rendered;
     }
-    seconds = fmod(seconds, one_gif_time);
+    seconds = fmod(seconds, gif_duration);
     int n = gif->frames_count;
-    double progress_gif_time = 0;
+    double d = 0;
     int i;
     for (i = 0; i < n; i++) {
-        progress_gif_time += gif->frames[i].duration / 100.0;
-        if (seconds < progress_gif_time){
+        d += gif->frames[i].duration / 100.0;
+        if (seconds < d){
             gif->display_index = i;
             return gif->frames[i].rendered;
         }

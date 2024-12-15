@@ -1,10 +1,8 @@
-
-#include "Game.h"
-#include <iostream>
-Game *game = new Game();
+#include "GameWindow.h"
 int main(int argc, char **argv)
 {
-  game->execute();
-  delete game;
-  return 0;
+	Game *game = New_Game();
+	game->execute(game);
+	game->game_destroy(game);
+	return 0;
 }
