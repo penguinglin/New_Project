@@ -1,7 +1,7 @@
 *.dll
 assets/characters
 assets/level
-assets/maps
+# assets/maps
 # assets/sound
 # assets/sound/*.ogg
 # assets/sound/*.mp3

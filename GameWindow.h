@@ -22,6 +22,9 @@ public:
 private:
   const char *title;
   ALLEGRO_DISPLAY *display;
+  ALLEGRO_EVENT_QUEUE *event_queue = NULL;
+  ALLEGRO_EVENT event;
+  ALLEGRO_TIMER *timer = NULL;
 };
 
 #endif // GAMEWINDOW_H_INCLUDED

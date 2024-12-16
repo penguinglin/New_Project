@@ -13,7 +13,6 @@
 // include scene and following component
 #include "scene/sceneManager.h"
 #include <stdbool.h>
-#include "scene/SceneCenter.h"
 
 Game::Game()
 {
