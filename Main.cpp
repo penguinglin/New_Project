@@ -1,8 +1,9 @@
+// update main.cpp ok
 #include "GameWindow.h"
 int main(int argc, char **argv)
 {
-	Game *game = New_Game();
-	game->execute(game);
-	game->game_destroy(game);
+	Game *game = new Game();
+	game->execute();
+	delete game;
 	return 0;
 }

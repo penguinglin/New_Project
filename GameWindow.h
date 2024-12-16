@@ -4,30 +4,24 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 #include <stdbool.h>
+#include <string>
 
-typedef struct _GAME Game;
-typedef void (*fptrGameExecute)(Game *);
-typedef void (*fptrGameInit)(Game *);
-typedef bool (*fptrGameUpdate)(Game *);
-typedef void (*fptrGameDraw)(Game *);
-typedef void (*fptrGameDestroy)(Game *);
-void execute(Game *);
-void game_init(Game *);
-bool game_update(Game *);
-void game_draw(Game *);
-void game_destroy(Game *);
-struct _GAME
+class Game
 {
-    const char *title;
-    // ALLEGRO Variables
-    ALLEGRO_DISPLAY *display;
-    fptrGameExecute execute;
-    fptrGameInit game_init;
-    fptrGameUpdate game_update;
-    fptrGameDraw game_draw;
-    fptrGameDestroy game_destroy;
+public:
+  // Constructor and Destructor
+  Game();  // game_init
+  ~Game(); // game_destroy
 
+  // Core Methods
+  void execute(); // game_execute
+  void game_init();
+  bool game_update(); // game_update
+  void game_draw();   // game_draw
+
+private:
+  const char *title;
+  ALLEGRO_DISPLAY *display;
 };
-Game *New_Game();
 
-#endif
+#endif // GAMEWINDOW_H_INCLUDED

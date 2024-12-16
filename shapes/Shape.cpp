@@ -2,7 +2,8 @@
 #include "Point.h"
 #include "Rectangle.h"
 #include "Circle.h"
-#include "../GAME_ASSERT.h"
+// #include "../GAME_ASSERT.h"
+#include "../Utils.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include "../global.h"

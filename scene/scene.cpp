@@ -82,6 +82,7 @@ ElementVec _Get_label_elements(Scene *scene, int label)
     res.len = size;
     return res;
 }
+
 Scene *New_Scene(int label)
 {
     Scene *pObj;

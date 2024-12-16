@@ -20,6 +20,7 @@ typedef struct Element_vector
     int len;
 } ElementVec;
 typedef struct _Scene Scene;
+
 typedef void (*fptrUpdate)(Scene *);
 typedef void (*fptrDraw)(Scene *);
 typedef void (*fptrDestroy)(Scene *);
@@ -29,13 +30,17 @@ struct _Scene
     void *pDerivedObj;
     bool scene_end;
     int ele_num;
+
     EPNode *ele_list[MAX_ELEMENT];
+
     // interface for function
     fptrUpdate Update;
     fptrDraw Draw;
     fptrDestroy Destroy;
 };
+
 Scene *New_Scene(int label);
+
 void _Register_elements(Scene *scene, Elements *ele);
 void _Remove_elements(Scene *scene, Elements *ele);
 ElementVec _Get_all_elements(Scene *scene);

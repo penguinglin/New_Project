@@ -1,4 +1,5 @@
 #include "gamescene.h"
+#include "scene.h"
 #define BUTTON_NUM 4
 /*
    [GameScene function]
@@ -141,7 +142,7 @@ Scene *New_GameScene(int label)
     // 訂單
     _Register_elements(pObj, New_OrderControl(OrderControl_L));
 
-    _Register_elements(pObj, New_Exit(Exit_L));
+    // _Register_elements(pObj, New_Exit(Exit_L));
 
     // setting derived object function
     pObj->Update = game_scene_update;
